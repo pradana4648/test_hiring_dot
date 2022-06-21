@@ -1,5 +1,5 @@
 class Place {
-  final String id;
+  final int id;
   final String title;
   final String content;
   final String type;
@@ -7,22 +7,22 @@ class Place {
   final List<String> media;
 
   const Place({
-    required this.id,
-    required this.title,
-    required this.content,
-    required this.type,
-    required this.image,
-    required this.media,
+    this.id = 0,
+    this.title = '',
+    this.content = '',
+    this.type = '',
+    this.image = '',
+    this.media = const <String>[],
   });
 
   factory Place.fromJson(Map<String, dynamic> map) {
     return Place(
-      id: map['id'] ?? '',
+      id: map['id'] ?? 0,
       title: map['title'] ?? '',
       content: map['content'] ?? '',
       type: map['type'] ?? '',
       image: map['image'] ?? '',
-      media: map['media'] ?? <String>[],
+      media: List<String>.from(map['media'] ?? <String>[]),
     );
   }
 }

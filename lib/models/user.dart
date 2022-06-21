@@ -1,22 +1,25 @@
 class User {
-  final String id;
+  final int id;
   final String username;
+  final String fullName;
   final String email;
   final String phone;
   final String avatar;
 
   const User({
-    required this.id,
-    required this.username,
-    required this.email,
-    required this.phone,
-    required this.avatar,
+    this.id = 0,
+    this.username = '',
+    this.fullName = '',
+    this.email = '',
+    this.phone = '',
+    this.avatar = '',
   });
 
   factory User.fromJson(Map<String, dynamic> map) {
     return User(
-      id: map['id'] ?? '',
+      id: map['id'] ?? 0,
       username: map['username'] ?? '',
+      fullName: map['fullname'] ?? '',
       email: map['email'] ?? '',
       phone: map['phone'] ?? '',
       avatar: map['avatar'] ?? '',

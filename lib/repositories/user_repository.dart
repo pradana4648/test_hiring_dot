@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:test_hiring_dot/models/user.dart';
 
 class UserRepository {
-  Future<User?> getUser() async {
+  Future<User> getUser() async {
     final response =
         await http.get(Uri.parse('https://dot-mobile-test.web.app/user.json'));
 
@@ -14,6 +14,6 @@ class UserRepository {
       final user = User.fromJson(jsonResult['data']);
       return user;
     }
-    return null;
+    return const User();
   }
 }

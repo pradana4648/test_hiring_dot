@@ -3,34 +3,20 @@ import 'package:test_hiring_dot/bloc/screen_bloc.dart';
 import 'package:test_hiring_dot/pages/home_page.dart';
 
 void main() => runApp(
-      MyApp(
-        screenBloc: ScreenBloc(),
-      ),
+      const MyApp(),
     );
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key, required this.screenBloc}) : super(key: key);
-
-  final ScreenBloc screenBloc;
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void dispose() {
-    widget.screenBloc.close();
-    super.dispose();
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final screenBloc = ScreenBloc();
     return MaterialApp(
       title: 'Test Hiring',
       home: Scaffold(
         bottomNavigationBar: StreamBuilder<int>(
-            stream: widget.screenBloc.getStreamIndex,
+            stream: screenBloc.getStreamIndex,
             builder: (context, snapshot) {
               return BottomNavigationBar(
                 currentIndex: snapshot.data ?? 0,
@@ -43,11 +29,11 @@ class _MyAppState extends State<MyApp> {
                       icon: Icon(Icons.person), label: 'User'),
                 ],
                 onTap: (index) {
-                  widget.screenBloc.onChangeIndex(index);
+                  screenBloc.onChangeIndex(index);
                 },
               );
             }),
-        body: HomeScreen(screenBloc: widget.screenBloc),
+        body: HomeScreen(screenBloc: screenBloc),
       ),
     );
   }

@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:test_hiring_dot/bloc/gallery_bloc.dart';
+import 'package:test_hiring_dot/models/gallery.dart';
+import 'package:test_hiring_dot/repositories/gallery_repository.dart';
 
-class GalleryWidget extends StatelessWidget {
+class GalleryWidget extends StatefulWidget {
   const GalleryWidget({Key? key}) : super(key: key);
+
+  @override
+  State<GalleryWidget> createState() => _GalleryWidgetState();
+}
+
+class _GalleryWidgetState extends State<GalleryWidget> {
+  final galleryBloc = GalleryBloc(repository: GalleryRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +32,35 @@ class GalleryWidget extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           const SizedBox(height: 10),
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 4 / 3,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-            ),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Container(color: Colors.red);
-            },
-            itemCount: 15,
-          )
+          StreamBuilder<List<Gallery>>(
+              stream: galleryBloc.getStreamGalleries,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final galleries = snapshot.data!;
+                  return GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 4 / 3,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        child: galleries[index].image.isEmpty
+                            ? const FlutterLogo(
+                                size: double.infinity,
+                              )
+                            : Image.network(galleries[index].image),
+                      );
+                    },
+                    itemCount: galleries.length,
+                  );
+                }
+                return const Text('No Data Available');
+              })
         ],
       ),
     );

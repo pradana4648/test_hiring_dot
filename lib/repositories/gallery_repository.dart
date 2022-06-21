@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:test_hiring_dot/models/gallery.dart';
 
 class GalleryRepository {
-  Future<List<Gallery>?> getGallery() async {
+  Future<List<Gallery>> getGalleries() async {
     final response =
         await http.get(Uri.parse('https://dot-mobile-test.web.app/place.json'));
 
@@ -16,6 +16,6 @@ class GalleryRepository {
           .toList();
       return result;
     }
-    return null;
+    return <Gallery>[];
   }
 }
