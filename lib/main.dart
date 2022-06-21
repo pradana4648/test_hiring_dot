@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_hiring_dot/bloc/screen_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_hiring_dot/pages/home_page.dart';
+import 'package:test_hiring_dot/pages/login_screen.dart';
 
 void main() => runApp(
       const MyApp(),
@@ -11,29 +12,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenBloc = ScreenBloc();
+    final prefs = SharedPreferences.getInstance();
+
     return MaterialApp(
       title: 'Test Hiring',
       home: Scaffold(
-        bottomNavigationBar: StreamBuilder<int>(
-            stream: screenBloc.getStreamIndex,
+        body: FutureBuilder<bool?>(
+            future: prefs.then((pref) => pref.getBool('mykey')),
             builder: (context, snapshot) {
-              return BottomNavigationBar(
-                currentIndex: snapshot.data ?? 0,
-                items: const [
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.place), label: 'Place'),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.browse_gallery), label: 'Gallery'),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.person), label: 'User'),
-                ],
-                onTap: (index) {
-                  screenBloc.onChangeIndex(index);
-                },
-              );
+              final result = snapshot.data;
+              if (result == null) return const LoginScreen();
+              return const HomeScreen();
             }),
-        body: HomeScreen(screenBloc: screenBloc),
       ),
     );
   }
